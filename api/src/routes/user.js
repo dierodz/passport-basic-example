@@ -3,8 +3,12 @@ const { User } = require("../db.js");
 
 server.get("/", async (req, res, next) => {
   try {
-    const result = await User.findAll();
-    res.json(result);
+    if (req.user?.isAdmin) {
+      const result = await User.findAll();
+      res.json(result);
+    } else {
+      res.sendStatus(401);;
+    }
   } catch (error) {
     next(error);
   }
